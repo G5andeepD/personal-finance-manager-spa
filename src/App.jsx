@@ -1,18 +1,35 @@
-// src/App.jsx
-
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Income from './components/Income';
 import Expense from './components/Expense';
 import Summary from './components/Summary';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const apiUrl = window?.configs?.apiUrl ? window.configs.apiUrl : "/";
+
 function App() {
   const [summary, setSummary] = useState({ totalIncome: 0, totalExpenses: 0, cashInHand: 0 });
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetchSummary();
+    if (Cookies.get('userinfo')) {
+      const userInfoCookie = Cookies.get('userinfo');
+      sessionStorage.setItem("userInfo", userInfoCookie);
+      Cookies.remove('userinfo');
+      const userInfo = JSON.parse(atob(userInfoCookie));
+      setSignedIn(true);
+      setUser(userInfo);
+    } else if (sessionStorage.getItem("userInfo")) {
+      const userInfo = JSON.parse(atob(sessionStorage.getItem("userInfo")));
+      setSignedIn(true);
+      setUser(userInfo);
+    } else {
+      console.log("User is not signed in");
+    }
+    setIsAuthLoading(false);
   }, []);
 
   const fetchSummary = async () => {
@@ -24,22 +41,43 @@ function App() {
     }
   };
 
+  
+
   return (
     <div className="App">
       <header className="header">
-        Personal Finance Manager
+        <div className="header-content">
+          Personal Finance Manager
+          {signedIn ? (
+            <button onClick={async () => {
+              sessionStorage.removeItem("userInfo");
+              setSignedIn(false);
+              setUser(null);
+              window.location.href = `/auth/logout?session_hint=${Cookies.get('session_hint')}`;
+            }}>Logout</button>
+          ) : (
+            <button className="login-button" onClick={() => { window.location.href = "/auth/login" }}>Login</button>
+          )}
+        </div>
       </header>
-      <div className="summary">
-        <Summary summary={summary} />
-      </div>
-      <div className="content">
-        <div className="income">
-          <Income onIncomeAdded={fetchSummary} />
-        </div>
-        <div className="expense">
-          <Expense onExpenseAdded={fetchSummary} />
-        </div>
-      </div>
+
+      {!isAuthLoading && signedIn ? (
+        <>
+          <div className="summary">
+            <Summary summary={summary} />
+          </div>
+          <div className="content">
+            <div className="income">
+              <Income onIncomeAdded={fetchSummary} />
+            </div>
+            <div className="expense">
+              <Expense onExpenseAdded={fetchSummary} />
+            </div>
+          </div>
+        </>
+      ) : (
+        <div>Please log in to view your personal finance manager.</div>
+      )}
     </div>
   );
 }

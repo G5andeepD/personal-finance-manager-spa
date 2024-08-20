@@ -15,16 +15,41 @@ body {
 .header {
   background-color: #4A90E2;
   color: white;
-  text-align: center;
   padding: 1rem;
-  font-size: 1.5rem;
-  font-weight: bold;
   position: fixed;
   width: 100%;
   top: 0;
   left: 0;
   z-index: 1000;
+  display: flex;
+  justify-content: center;
 }
+
+.header-content {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+.login-button {
+  background-color: white;
+  color: #4A90E2;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #357ABD;
+  color: white;
+}
+
 
 .App {
   margin-top: 70px; /* To offset the fixed header */
