@@ -35,9 +35,8 @@ const Income = ({ onIncomeAdded }) => {
   const addIncome = async () => {
     try {
       const response = await axios.post(`${apiUrl}/income`, { amount, source });
-      //sort the incomes by timestamp
-      response.data.sort((a, b) => a.timestamp - b.timestamp
-      );
+      
+      
       setIncomes([...incomes, response.data]);
       setAmount(0);
       setSource('');
