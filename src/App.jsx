@@ -22,10 +22,12 @@ function App() {
       const userInfo = JSON.parse(atob(userInfoCookie));
       setSignedIn(true);
       setUser(userInfo);
+      fetchSummary();
     } else if (sessionStorage.getItem("userInfo")) {
       const userInfo = JSON.parse(atob(sessionStorage.getItem("userInfo")));
       setSignedIn(true);
       setUser(userInfo);
+      fetchSummary();
     } else {
       console.log("User is not signed in");
     }
