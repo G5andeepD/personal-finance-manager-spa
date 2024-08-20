@@ -25,7 +25,6 @@ const Expense = ({ onExpenseAdded }) => {
   const fetchExpenses = async () => {
     try {
       const response = await axios.get(`${apiUrl}/expense`);
-      response.data.sort((a, b) => b.timestamp - a.timestamp);
       setExpenses(response.data);
     } catch (error) {
       console.error('Error fetching expenses:', error);
@@ -35,7 +34,7 @@ const Expense = ({ onExpenseAdded }) => {
   const addExpense = async () => {
     try {
       const response = await axios.post(`${apiUrl}/expense`, { amount, category });
-      setExpenses([...expenses, response.data]);
+      setExpenses([response.data,...expenses]);
       setAmount('');
       setCategory('');
       onExpenseAdded(); // Trigger the summary update

@@ -26,7 +26,6 @@ const Income = ({ onIncomeAdded }) => {
   const fetchIncomes = async () => {
     try {
       const response = await axios.get(`${apiUrl}/income`);
-      response.data.sort((a, b) => a.timestamp - b.timestamp);
       setIncomes(response.data);
     } catch (error) {
       console.error('Error fetching incomes:', error);
@@ -38,7 +37,7 @@ const Income = ({ onIncomeAdded }) => {
       const response = await axios.post(`${apiUrl}/income`, { amount, source });
       
       
-      setIncomes([...incomes, response.data]);
+      setIncomes([response.data, ...incomes]);
       setAmount(0);
       setSource('');
       onIncomeAdded(); // Trigger the summary update
