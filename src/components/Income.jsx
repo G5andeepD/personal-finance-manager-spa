@@ -11,6 +11,8 @@ const incomeSources = [
   "Gifts", "Bonuses", "Dividends", "Other"
 ];
 
+const apiUrl = window?.configs?.apiUrl ? window.configs.apiUrl : "/";
+
 const Income = ({ onIncomeAdded }) => {
   const [incomes, setIncomes] = useState([]);
   const [amount, setAmount] = useState(0);
@@ -23,7 +25,7 @@ const Income = ({ onIncomeAdded }) => {
 
   const fetchIncomes = async () => {
     try {
-      const response = await axios.get('/api/v1/income');
+      const response = await axios.get(`${apiUrl}/income`);
       setIncomes(response.data);
     } catch (error) {
       console.error('Error fetching incomes:', error);
@@ -32,7 +34,7 @@ const Income = ({ onIncomeAdded }) => {
 
   const addIncome = async () => {
     try {
-      const response = await axios.post('/api/v1/income', { amount, source });
+      const response = await axios.post(`${apiUrl}/income`, { amount, source });
       setIncomes([...incomes, response.data]);
       setAmount(0);
       setSource('');
@@ -43,7 +45,7 @@ const Income = ({ onIncomeAdded }) => {
   };
   const deleteIncome = async (id) => {
     try {
-      await axios.delete(`/api/v1/income?id=${id}`);
+      await axios.delete(`${apiUrl}/income?id=${id}`);
       setIncomes(incomes.filter(income => income.id !== id));
       onIncomeAdded(); // Trigger the summary update
     } catch (error) {

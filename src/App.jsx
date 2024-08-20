@@ -7,6 +7,7 @@ import Expense from './components/Expense';
 import Summary from './components/Summary';
 import axios from 'axios';
 
+const apiUrl = window?.configs?.apiUrl ? window.configs.apiUrl : "/";
 function App() {
   const [summary, setSummary] = useState({ totalIncome: 0, totalExpenses: 0, cashInHand: 0 });
 
@@ -16,7 +17,7 @@ function App() {
 
   const fetchSummary = async () => {
     try {
-      const response = await axios.get('/api/v1/summary');
+      const response = await axios.get(`${apiUrl}/summary`);
       setSummary(response.data);
     } catch (error) {
       console.error('Error fetching summary:', error);

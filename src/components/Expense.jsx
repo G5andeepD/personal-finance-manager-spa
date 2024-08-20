@@ -10,6 +10,8 @@ const expenseCategories = [
   "Entertainment", "Healthcare", "Education", "Savings", "Miscellaneous"
 ];
 
+const apiUrl = window?.configs?.apiUrl ? window.configs.apiUrl : "/";
+
 const Expense = ({ onExpenseAdded }) => {
   const [expenses, setExpenses] = useState([]);
   const [amount, setAmount] = useState('');
@@ -22,7 +24,7 @@ const Expense = ({ onExpenseAdded }) => {
 
   const fetchExpenses = async () => {
     try {
-      const response = await axios.get('/api/v1/expense');
+      const response = await axios.get(`${apiUrl}/expense`);
       setExpenses(response.data);
     } catch (error) {
       console.error('Error fetching expenses:', error);
@@ -31,7 +33,7 @@ const Expense = ({ onExpenseAdded }) => {
 
   const addExpense = async () => {
     try {
-      const response = await axios.post('/api/v1/expense', { amount, category });
+      const response = await axios.post(`${apiUrl}/expense`, { amount, category });
       setExpenses([...expenses, response.data]);
       setAmount('');
       setCategory('');
@@ -42,7 +44,7 @@ const Expense = ({ onExpenseAdded }) => {
   };
   const deleteExpense = async (id) => {
     try {
-      await axios.delete(`/api/v1/expense?id=${id}`);
+      await axios.delete(`${apiUrl}/expense?id=${id}`);
       setExpenses(expenses.filter(expense => expense.id !== id));
       onExpenseAdded(); // Trigger the summary update
     } catch (error) {
