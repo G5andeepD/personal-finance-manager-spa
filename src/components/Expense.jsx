@@ -25,6 +25,7 @@ const Expense = ({ onExpenseAdded }) => {
   const fetchExpenses = async () => {
     try {
       const response = await axios.get(`${apiUrl}/expense`);
+      response.data.sort((a, b) => b.timestamp - a.timestamp);
       setExpenses(response.data);
     } catch (error) {
       console.error('Error fetching expenses:', error);
